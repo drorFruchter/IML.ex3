@@ -67,5 +67,5 @@ def read_data_demo(filename='train.csv'):
     # the data in numpy array format
     data_numpy = df.values
 
-    return data_numpy, col_names
+    return data_numpy[:, :-1], data_numpy[:, -1], col_names
 

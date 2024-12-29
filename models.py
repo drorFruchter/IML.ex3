@@ -7,8 +7,10 @@ class Ridge_Regression:
 
     def __init__(self, lambd):
         self.lambd = lambd
+        self.W = None
+        self.bias = None
 
-    def fit(self, X, Y):
+    def fit(self, X: np.ndarray, Y: np.ndarray):
 
         """
         Fit the ridge regression model to the provided data.
@@ -24,7 +26,21 @@ class Ridge_Regression:
         # you may not use np.linalg.solve, but you may use np.linalg.inv
 
         ####################################
-        pass
+        X = X.T
+
+        N_train = X.shape[1]
+        X_extended = np.vstack([X, np.ones((1, X.shape[1]))])
+
+        XX_T = X_extended @ X_extended.T / N_train
+        I = np.eye(X_extended.shape[0])
+
+        inverse = np.linalg.inv(XX_T + self.lambd * I)
+        XY_T = (X_extended @ Y) / N_train
+
+        W_extended = inverse @ XY_T
+
+        self.W = W_extended[:-1]
+        self.bias = W_extended[-1]
 
     def predict(self, X):
         """
@@ -40,11 +56,15 @@ class Ridge_Regression:
 
         ####################################
 
+        X = X.T
+
+        preds = self.W @ X + self.bias
+        preds = np.where(preds >= 0, 1, -1)
         # transform the labels to 0s and 1s, instead of -1s and 1s.
         # You may remove this line if your code already outputs 0s and 1s.
         preds = (preds + 1) / 2
 
-        return preds
+        return preds.flatten()
 
 
 
@@ -57,7 +77,7 @@ class Logistic_Regression(nn.Module):
         # define a linear operation.
 
         ####################################
-        pass
+        self.linear = nn.Linear(input_dim, output_dim)
 
     def forward(self, x):
         """
@@ -75,7 +95,7 @@ class Logistic_Regression(nn.Module):
 
         ####################################
 
-        pass
+        return self.linear(x)
 
     def predict(self, x):
         """
