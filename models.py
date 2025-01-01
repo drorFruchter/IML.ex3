@@ -78,6 +78,9 @@ class Logistic_Regression(nn.Module):
 
         ####################################
         self.linear = nn.Linear(input_dim, output_dim)
+        self.train_losses = None
+        self.validation_losses = None
+        self.test_losses = None
 
     def forward(self, x):
         """
